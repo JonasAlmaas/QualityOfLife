@@ -1,9 +1,9 @@
 import bpy
-from . import snap_to_world_plane
+from . import snap_to_world_axis
 
 
 classes = (
-    snap_to_world_plane.SnapToWorldPlane,
+    snap_to_world_axis.SnapToWorldAxis,
 )
 
 
