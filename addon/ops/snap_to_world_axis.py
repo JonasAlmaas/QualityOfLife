@@ -3,6 +3,21 @@ import bmesh
 import mathutils
 
 
+def snap_items(self, context):
+    if context.mode == 'OBJECT':
+        return [
+            ('WORLD', 'World', 'Snap to world'),
+            ('3DCURSOR', '3D Cursor', 'Snap to the 3D cursor'),
+        ]
+
+    elif context.mode == 'EDIT_MESH':
+        return [
+            ('WORLD', 'World', 'Snap to world'),
+            ('OBJECT', 'Object', 'Snap to object origion'),
+            ('3DCURSOR', '3D Cursor', 'Snap to the 3D cursor'),
+        ]
+
+
 class SnapToWorldAxis(bpy.types.Operator):
     bl_idname = 'qol.snap_to_world_axis'
     bl_label = 'Snap To World Axis'
@@ -20,12 +35,8 @@ class SnapToWorldAxis(bpy.types.Operator):
     snap: bpy.props.EnumProperty(
         name='Snap To',
         description='What to snap to',
-        items=[
-            ('World', 'World', 'Snap to world'),
-            ('Object', 'Object', 'Snap to object origion'),
-            ('3DCursor', '3D Cursor', 'Snap to the 3D cursor'),
-        ],
-        default='World',
+        items=snap_items,
+        default=0,
     )
 
     def draw(self, context):
@@ -44,26 +55,21 @@ class SnapToWorldAxis(bpy.types.Operator):
         location = active.location
 
         if context.mode == 'OBJECT':
-            if self.snap == 'World':
+            if self.snap == 'WORLD':
                 for index, value in enumerate(self.axes):
                     if value:
                         location[index] = 0
 
-            elif self.snap == '3DCursor':
+            elif self.snap == '3DCURSOR':
                 cursor_location = context.scene.cursor.location
 
                 for index, value in enumerate(self.axes):
                     if value:
                         location[index] = cursor_location[index]
-            
-            # TODO, Make it do the OBJECT snap option doesnt show up in object mode
 
         if context.mode == 'EDIT_MESH':
             bm = bmesh.from_edit_mesh(active.data)
             geo = bm.select_history.active
-
-            space = active.matrix_world
-            vec = -location
 
             if isinstance(geo, bmesh.types.BMVert):
                 location = geo.co
@@ -74,14 +80,18 @@ class SnapToWorldAxis(bpy.types.Operator):
             elif isinstance(geo, bmesh.types.BMFace):
                 location = geo.calc_center_median()
 
-            if self.snap == 'World':
+            space = active.matrix_world
+            vec = -location
+
+            if self.snap == 'WORLD':
                 vec = -(space @ location)
 
-            elif self.snap == '3DCursor':
+            elif self.snap == 'OBJECT':
+                space = mathutils.Matrix.Identity(4)
+
+            elif self.snap == '3DCURSOR':
                 cursor_location = context.scene.cursor.location
                 vec = -((space @ location) - cursor_location)
-
-            # For Object Mode use the default vec (-location)
 
             # Setting all the axes we don't wanna change to 0
             for index, value in enumerate(self.axes):

@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Almaas",
     "description" : "This addon might just make your life that tad bit better",
     "blender" : (2, 91, 0),
-    "version" : (0, 0, 1),
+    "version" : (0, 1, 0),
     "location" : "",
     "warning" : "",
     "category" : "3D View"
