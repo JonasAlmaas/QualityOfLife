@@ -1,7 +1,7 @@
 bl_info = {
     "name" : "Quality Of Life",
     "author" : "Almaas",
-    "description" : "This addon might make your life better",
+    "description" : "This addon might just make your life that tad bit better",
     "blender" : (2, 91, 0),
     "version" : (0, 0, 1),
     "location" : "",

@@ -1,6 +1,6 @@
 <!-- HEADER -->
 # Blender Addon - Quality Of Life
-Sometimes using Blender you might feel like it is missing a few things you wish were there. Therefore I decided to make this addon. I am planning on adding new features to it as time goes, so if you have some features you want to be added, feel free to send me a DM on [Discord](a "Almaas#0001").
+Sometimes using Blender you might feel like it is missing a few things you wish were there. Therefore I decided to make this addon. I am planning on adding new features to it as time goes, so if you have some features you want to be added, feel free to send me a dm on [Discord](a "Almaas#0001").
 
 Thanks for reading, and hopefully trying it out.
 

@@ -17,16 +17,21 @@ class SnapToWorldAxis(bpy.types.Operator):
         default=(False, False, True),
     )
 
-    world: bpy.props.BoolProperty(
-        name='Snap To World Space',
-        description='Snap to world space axis',
-        default=True,
+    snap: bpy.props.EnumProperty(
+        name='Snap To',
+        description='What to snap to',
+        items=[
+            ('World', 'World', 'Snap to world'),
+            ('Object', 'Object', 'Snap to object origion'),
+            ('3DCursor', '3D Cursor', 'Snap to the 3D cursor'),
+        ],
+        default='World',
     )
 
     def draw(self, context):
         layout = self.layout
         layout.prop(self, 'axes')
-        layout.prop(self, 'world')
+        layout.prop(self, 'snap')
 
     @classmethod
     def poll(cls, context):
@@ -36,7 +41,8 @@ class SnapToWorldAxis(bpy.types.Operator):
 
     def execute(self, context):
         active = context.active_object
-        
+        space = active.matrix_world
+
         if context.mode == 'OBJECT':
             for index, value in enumerate(self.axes):
                 if value:
@@ -58,10 +64,13 @@ class SnapToWorldAxis(bpy.types.Operator):
             else:
                 location = active.location
 
-            space = active.matrix_world
-
-            if self.world:
+            if self.snap == 'World':
                 vec = -(space @ location)
+
+            elif self.snap == '3DCursor':
+                cursor_location = context.scene.cursor.location
+                vec = -((space @ location) - cursor_location)
+            # Object
             else:
                 vec = -location
 
