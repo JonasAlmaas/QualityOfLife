@@ -18,7 +18,7 @@ class SnapToWorldAxis(bpy.types.Operator):
     )
 
     world: bpy.props.BoolProperty(
-        name='Use World Space',
+        name='Snap To World Space',
         description='Snap to world space axis',
         default=True,
     )
@@ -26,6 +26,7 @@ class SnapToWorldAxis(bpy.types.Operator):
     def draw(self, context):
         layout = self.layout
         layout.prop(self, 'axes')
+        layout.prop(self, 'world')
 
     @classmethod
     def poll(cls, context):
@@ -57,12 +58,12 @@ class SnapToWorldAxis(bpy.types.Operator):
             else:
                 location = active.location
 
-            if self.world:
-                space = active.matrix_world
-            else:
-                space=mathutils.Vector(3)
+            space = active.matrix_world
 
-            vec = -(space @ location)
+            if self.world:
+                vec = -(space @ location)
+            else:
+                vec = -location
 
             for index, value in enumerate(self.axes):
                 if not value:
@@ -70,6 +71,5 @@ class SnapToWorldAxis(bpy.types.Operator):
 
             bmesh.ops.translate(bm, verts=bm.verts, vec=vec, space=space)
             bmesh.update_edit_mesh(active.data)
-
 
         return {'FINISHED'}
