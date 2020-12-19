@@ -41,16 +41,29 @@ class SnapToWorldAxis(bpy.types.Operator):
 
     def execute(self, context):
         active = context.active_object
-        space = active.matrix_world
+        location = active.location
 
         if context.mode == 'OBJECT':
-            for index, value in enumerate(self.axes):
-                if value:
-                    active.location[index] = 0
-        
+            if self.snap == 'World':
+                for index, value in enumerate(self.axes):
+                    if value:
+                        location[index] = 0
+
+            elif self.snap == '3DCursor':
+                cursor_location = context.scene.cursor.location
+
+                for index, value in enumerate(self.axes):
+                    if value:
+                        location[index] = cursor_location[index]
+            
+            # TODO, Make it do the OBJECT snap option doesnt show up in object mode
+
         if context.mode == 'EDIT_MESH':
             bm = bmesh.from_edit_mesh(active.data)
             geo = bm.select_history.active
+
+            space = active.matrix_world
+            vec = -location
 
             if isinstance(geo, bmesh.types.BMVert):
                 location = geo.co
@@ -61,19 +74,16 @@ class SnapToWorldAxis(bpy.types.Operator):
             elif isinstance(geo, bmesh.types.BMFace):
                 location = geo.calc_center_median()
 
-            else:
-                location = active.location
-
             if self.snap == 'World':
                 vec = -(space @ location)
 
             elif self.snap == '3DCursor':
                 cursor_location = context.scene.cursor.location
                 vec = -((space @ location) - cursor_location)
-            # Object
-            else:
-                vec = -location
 
+            # For Object Mode use the default vec (-location)
+
+            # Setting all the axes we don't wanna change to 0
             for index, value in enumerate(self.axes):
                 if not value:
                     vec[index] = 0
