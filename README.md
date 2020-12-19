@@ -8,7 +8,7 @@ Thanks for reading, and hopefully trying it out.
 ## Snap to world axes
 **Snap to world axes lets you select something and move it to one or more world axes, you can also snap to the active object axes.**
 
-To use this feature make sure to be in either `OJECT` or `EDIT` mode and press `This key-bind`. After that, select the axes you wish to snap to. If you want to snap to the object's axes instead, press `This key-bind` or who knows, do something else. This will only work after entering normal snap to world axes mode. Or who knows, maybe it will just work.
+To use this feature make sure to be in either `OBJECT` or `EDIT` mode and press `This key-bind`. After that, select the axes you wish to snap to. If you want to snap to the object's axes instead, press `This key-bind` or who knows, do something else. This will only work after entering normal snap to world axes mode. Or who knows, maybe it will just work.
 
 <!-- Contact Info -->
 ## Author Contact Information
