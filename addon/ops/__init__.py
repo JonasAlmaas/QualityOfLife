@@ -1,5 +1,6 @@
 import bpy
 from . import snap_to_world_axis
+from . import checker_select_edge_loop
 
 
 # Menu containing all tools
@@ -9,6 +10,7 @@ class VIEW3D_MENU_quality_of_life(bpy.types.Menu):
     def draw(self, context):
         layout = self.layout
         layout.operator("qol.snap_to_world_axis")
+        layout.operator("qol.checker_select_edge_loop")
 
 
 # Draw function for menus
@@ -20,6 +22,7 @@ def menu_func(self, context):
 classes = (
     VIEW3D_MENU_quality_of_life,
     snap_to_world_axis.SnapToWorldAxis,
+    checker_select_edge_loop.CheckerSelectEdgeLoop
 )
 
 
